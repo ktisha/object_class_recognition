@@ -3,21 +3,13 @@ import cv2
 import os
 
 
-class ImageLoaderError(Exception):
-
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        return repr(self.value)
-
-
 class ImageLoader:
 
     def __init__(self, cut_size=250, image_dir_path=os.getcwd(), haarcascade_path='haarcascade_eye.xml'):
         self.separator = os.sep
         self.haarcascade_name = haarcascade_path
         self.cascade = []
+        self.init_haar()
         assert isinstance(cut_size, int)
         self.cut_size = cut_size
         self.image_ext = [".jpg", ".png", ".bmp"]
@@ -25,27 +17,28 @@ class ImageLoader:
         self.image_dir = os.listdir(image_dir_path)
 
     def init_haar(self):
-        self.cascade = cv2.CascadeClassifier(self.haarcascade_name)
+        try:
+            self.cascade = cv2.CascadeClassifier(self.haarcascade_name)
+        except Exception:
+            self.cascade = []
 
-    def smart_load(self, image_name):
+    def load(self, image_name):
+        full_path = self.dir_path + self.separator + image_name
+        image = cv2.imread(full_path)
         if not self.cascade:
-            raise ImageLoaderError("Haarcascade doesn't load for smart cut")
+            cutted_image = self.__simple_cut(image)
         else:
-            full_path = self.dir_path + self.separator + image_name
-            image = cv2.imread(full_path)
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             eyes = self.cascade.detectMultiScale(gray)
             try:
                 x_local = eyes[0][0]
                 y_local = eyes[0][1]
-                precalc = self.smart_cut(x_local, y_local, image)
+                cutted_image = self.__smart_cut(x_local, y_local, image)
             except IndexError:
-                precalc = self.simple_cut(image)
-            finally:
-                return cv2.resize(precalc, (self.cut_size, self.cut_size))
+                cutted_image = self.__simple_cut(image)
+        return cv2.resize(cutted_image, (self.cut_size, self.cut_size))
 
-    @staticmethod
-    def smart_cut(x_local, y_local, image):
+    def __smart_cut(self, x_local, y_local, image):
         height = image.shape[0]
         width = image.shape[1]
         if height < width:
@@ -68,14 +61,7 @@ class ImageLoader:
                 cutted_image = image[0:y_local + top_adjust, 0:width]
         return cutted_image
 
-    def simple_load(self, image_name):
-        full_path = self.dir_path + self.separator + image_name
-        image = cv2.imread(full_path)
-        precalc = self.simple_cut(image)
-        return cv2.resize(precalc, (self.cut_size, self.cut_size))
-
-    @staticmethod
-    def simple_cut(image):
+    def __simple_cut(self, image):
         height = image.shape[0]
         width = image.shape[1]
         x_local = width / 2
@@ -95,6 +81,8 @@ class ImageLoader:
             if filext in self.image_ext:
                 image_names.append(some_file)
         return image_names
+
+
 
 
 
