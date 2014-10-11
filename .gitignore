@@ -2,3 +2,4 @@ data/train/
 data/train.zip
 .idea/
 venv/
+*.pyc
