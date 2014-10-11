@@ -3,3 +3,5 @@ data/train.zip
 .idea/
 venv/
 *.pyc
+src/loader_test.py
+src/cache

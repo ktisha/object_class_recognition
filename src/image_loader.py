@@ -13,8 +13,11 @@ class ImageLoader:
         assert isinstance(cut_size, int)
         self.cut_size = cut_size
         self.image_ext = [".jpg", ".png", ".bmp"]
-        self.dir_path = image_dir_path
-        self.image_dir = os.listdir(image_dir_path)
+        self.image_dir_path = image_dir_path
+        self.image_dir = self.__init_image_dir()
+        self.cache_dir_path = os.getcwd() + self.separator + 'cache'
+        self.cache_dir = []
+        self.__init_cache_dir()
 
     def init_haar(self):
         try:
@@ -23,20 +26,35 @@ class ImageLoader:
             self.cascade = []
 
     def load(self, image_name):
-        full_path = self.dir_path + self.separator + image_name
-        image = cv2.imread(full_path)
-        if not self.cascade:
-            cutted_image = self.__simple_cut(image)
+        if image_name in self.cache_dir:
+            resized_image = self.__load_cached(image_name)
         else:
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            eyes = self.cascade.detectMultiScale(gray)
-            try:
-                x_local = eyes[0][0]
-                y_local = eyes[0][1]
-                cutted_image = self.__smart_cut(x_local, y_local, image)
-            except IndexError:
+            full_path = self.image_dir_path + self.separator + image_name
+            image = cv2.imread(full_path)
+            if not self.cascade:
                 cutted_image = self.__simple_cut(image)
-        return cv2.resize(cutted_image, (self.cut_size, self.cut_size))
+            else:
+                gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+                eyes = self.cascade.detectMultiScale(gray)
+                try:
+                    x_local = eyes[0][0]
+                    y_local = eyes[0][1]
+                    cutted_image = self.__smart_cut(x_local, y_local, image)
+                except IndexError:
+                    cutted_image = self.__simple_cut(image)
+            resized_image = cv2.resize(cutted_image, (self.cut_size, self.cut_size))
+            cv2.imwrite(self.cache_dir_path + self.separator + image_name, resized_image)
+            self.cache_dir.append(image_name)
+        return resized_image
+
+    def __load_cached(self, image_name):
+        try:
+            image = cv2.imread(self.cache_dir_path + self.separator + image_name)
+        except Exception:
+            cutted_image = self.__simple_cut(image_name)
+            image = cv2.resize(cutted_image, (self.cut_size, self.cut_size))
+            cv2.imwrite(self.cache_dir_path + self.separator + image_name, image)
+        return image
 
     def __smart_cut(self, x_local, y_local, image):
         height = image.shape[0]
@@ -75,12 +93,23 @@ class ImageLoader:
         return cutted_image
 
     def available_images(self):
+        return self.image_dir
+
+    def __init_cache_dir(self):
+        if not os.path.exists(self.cache_dir_path):
+            os.mkdir(self.cache_dir_path)
+        else:
+            self.cache_dir = os.listdir(self.cache_dir_path)
+
+    def __init_image_dir(self):
         image_names = []
-        for some_file in self.image_dir:
+        all_files = os.listdir(self.image_dir_path)
+        for some_file in all_files:
             filext = os.path.splitext(some_file)[1]
             if filext in self.image_ext:
-                image_names.append(some_file)
+               image_names.append(some_file)
         return image_names
+
 
 
 
