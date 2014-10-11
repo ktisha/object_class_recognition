@@ -74,7 +74,7 @@ class ImageLoader:
             if top_space < diff:
                 bot_adjust = 2 * diff - top_space
                 cutted_image = image[y_local - bot_adjust:height, 0:width]
-            elif y_local < diff:
+            else:
                 top_adjust = 2 * diff - y_local
                 cutted_image = image[0:y_local + top_adjust, 0:width]
         return cutted_image
