@@ -10,17 +10,3 @@ class FeatureExtractor(object):
         :return: feature vector
         """
         return
-
-
-class TextureFeatureExtractor(FeatureExtractor):
-    def __init__(self):
-        None
-    def extract(self, img):
-        return []
-
-
-class ColorFeatureExtractor(FeatureExtractor):
-    def __init__(self):
-        None
-    def extract(self, img):
-        return []
