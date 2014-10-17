@@ -5,30 +5,30 @@ import os
 
 class ImageLoader:
 
-    def __init__(self, cut_size=250, image_dir_path=os.getcwd(), haarcascade_path='haarcascade_eye.xml'):
+    def __init__(self, image_dir_path=os.getcwd(), cut_size=250, haarcascade_path='haarcascade_eye.xml'):
         self.separator = os.sep
         self.haarcascade_name = haarcascade_path
         self.cascade = []
-        self.init_haar()
+        self.__init_haar()
         assert isinstance(cut_size, int)
         self.cut_size = cut_size
         self.image_ext = [".jpg", ".png", ".bmp"]
         self.image_dir_path = image_dir_path
         self.image_dir = self.__init_image_dir()
-        self.cache_dir_path = os.getcwd() + self.separator + 'cache'
+        self.cache_dir_path = os.path.join(os.getcwd(), 'cache')
         self.cache_dir = []
         self.__init_cache_dir()
 
-    def init_haar(self):
+    def __init_haar(self):
         try:
             self.cascade = cv2.CascadeClassifier(self.haarcascade_name)
         except Exception:
             self.cascade = []
 
     def load(self, image_name):
-        if image_name in self.cache_dir:
+        try:
             resized_image = self.__load_cached(image_name)
-        else:
+        except IndexError:
             full_path = self.image_dir_path + self.separator + image_name
             image = cv2.imread(full_path)
             if not self.cascade:
@@ -45,16 +45,15 @@ class ImageLoader:
             resized_image = cv2.resize(cutted_image, (self.cut_size, self.cut_size))
             cv2.imwrite(self.cache_dir_path + self.separator + image_name, resized_image)
             self.cache_dir.append(image_name)
-        return resized_image
+        finally:
+            return resized_image
 
     def __load_cached(self, image_name):
-        try:
+        if image_name in self.cache_dir:
             image = cv2.imread(self.cache_dir_path + self.separator + image_name)
-        except Exception:
-            cutted_image = self.__simple_cut(image_name)
-            image = cv2.resize(cutted_image, (self.cut_size, self.cut_size))
-            cv2.imwrite(self.cache_dir_path + self.separator + image_name, image)
-        return image
+            return image
+        else:
+            raise IndexError
 
     def __smart_cut(self, x_local, y_local, image):
         height = image.shape[0]
