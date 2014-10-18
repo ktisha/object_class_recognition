@@ -11,3 +11,9 @@ class SolveContainer(object):
         Serialize object
         :return:
         """
+
+    def get_classifier(self):
+        return self.classifier
+
+    def get_extractor(self):
+        return self.features_extractor
