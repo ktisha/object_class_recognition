@@ -13,14 +13,16 @@ class TextureFeatureExtractor(FeatureExtractor):
     tfe = TextureFeatureExtractor()
     tfe.generate_tiles() # slow method
     features = tfe.extract(img) # very slow method
+    7 second for extracting one feature
     '''
-    def __init__(self, image_loader):
+    def __init__(self, image_loader, tile_size=50, tiles_count=1,
+                 images_for_tailing_count=500, delta=80.0, debug=False):
         self.il = image_loader
-        self.tile_size = 50
-        self.tiles_count = 1
-        self.images_for_tailing_count = 500
-        self.delta = 80.0
-        self.debug = False
+        self.tile_size = tile_size
+        self.tiles_count = tiles_count
+        self.images_for_tailing_count = images_for_tailing_count
+        self.delta = delta
+        self.debug = debug
 
     def extract(self, img):
         features = []
@@ -77,6 +79,11 @@ class TextureFeatureExtractor(FeatureExtractor):
         return False
 
     def generate_tiles(self):
+        '''
+        generate tiles, and initialize self.tiles
+        if images_for_tailing is too low raise exception
+        :return:
+        '''
         self.tiles = []
         available_images_names = self.il.available_images()
         images_for_tailing_names = random.sample(available_images_names, self.images_for_tailing_count)
@@ -89,6 +96,7 @@ class TextureFeatureExtractor(FeatureExtractor):
                     self._debug_print('tiles count: {}'.format(len(self.tiles)))
                     if len(self.tiles) == self.tiles_count:
                         return
+        raise Exception('Tiles not generated')
 
     def _divide_img_by_tiles(self, img):
         tiles = []
