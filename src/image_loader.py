@@ -192,8 +192,13 @@ class ImageLoader:
             pass
         return x_local, y_local
 
-
-
-
-
-
+    def __find_approx_center_in_conts_by_mass_center(self, conts):
+        center_x = 0
+        center_y = 0
+        for cont in conts:
+            m = cv2.moments(cont)
+            center_x += int(m['m10']/m['m00'])
+            center_y += int(m['m01']/m['m00'])
+        center_x /= len(conts)
+        center_y /= len(conts)
+        return center_x, center_y
