@@ -1,14 +1,14 @@
 import time
 
 import cv2
-from src.image_loader import ImageLoader
-from src.texture_feature_extractor import TextureFeatureExtractor
+from src.image_loader.image_loader import ImageLoader
+import src.feature_extractors.texture_feature_extractor as TFE
 
 import cProfile
 
 def test():
     il = ImageLoader(image_dir_path='../data/train')
-    tfe = TextureFeatureExtractor(il)
+    tfe = TFE.TextureFeatureExtractor(il)
     tfe.generate_tiles()
     img = il.load(il.available_images()[0])
     start = time.time()
