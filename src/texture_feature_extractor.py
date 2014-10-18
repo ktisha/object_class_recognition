@@ -3,6 +3,7 @@ import sys
 
 from numpy.linalg import norm
 from numpy.lib.function_base import average
+from numpy import amax
 
 from feature_extractor import FeatureExtractor
 
@@ -54,7 +55,7 @@ class TextureFeatureExtractor(FeatureExtractor):
         :param sub_img:
         :return: distance
         '''
-        return max(norm(tile.astype(float) - sub_img.astype(float), axis=2).flat)
+        return amax(norm(tile.astype(float) - sub_img.astype(float), axis=2).flat)
 
     def _tile_tile_distance(self, tile1, tile2):
         '''
