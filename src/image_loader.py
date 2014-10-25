@@ -29,7 +29,7 @@ class ImageLoader:
         try:
             resized_image = self.__load_cached(image_name)
         except IndexError:
-            full_path = self.image_dir_path + self.separator + image_name # maybe os.path.join(self.image_dir_path, image_name) ?
+            full_path = self.image_dir_path + self.separator + image_name
             image = cv2.imread(full_path)
             if not self.cascade:
                 cutted_image = self.__simple_cut(image)
@@ -43,23 +43,23 @@ class ImageLoader:
                 except IndexError:
                     cutted_image = self.__simple_cut(image)
             resized_image = cv2.resize(cutted_image, (self.cut_size, self.cut_size))
-            cv2.imwrite(self.cache_dir_path + self.separator + image_name, resized_image) # maybe os.path.join(...) ?
+            cv2.imwrite(self.cache_dir_path + self.separator + image_name, resized_image)
             self.cache_dir.append(image_name)
         finally:
             return resized_image
 
     def __load_cached(self, image_name):
         if image_name in self.cache_dir:
-            image = cv2.imread(self.cache_dir_path + self.separator + image_name) #os.path?
+            image = cv2.imread(self.cache_dir_path + self.separator + image_name)
             return image
         else:
-            raise IndexError #Maybe IOError ?
+            raise IndexError
 
     def __smart_cut(self, x_local, y_local, image):
         height = image.shape[0]
         width = image.shape[1]
         if height < width:
-            diff = height / 2  # use // instead / for compatibility with python 3
+            diff = height / 2
             right_space = width - x_local
             if right_space < diff:
                 left_adjust = 2 * diff - right_space
