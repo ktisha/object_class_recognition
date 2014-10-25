@@ -39,9 +39,9 @@ class TextureFeatureExtractor(FeatureExtractor):
         :return: distance in (0 ... sqrt(255**2 + 255**2 + 255**2))
         math.sqrt(255**2 + 255**2 + 255**2) = 441.67
         '''
-        (img_height, img_width) = img.shape[0:2]
+        (img_height, img_width) = img.shape[0:2] # maybe delete brackets?)
         (tile_height, tile_width) = tile.shape[0:2]
-        result = sys.float_info.max
+        result = sys.float_info.max # maybe use float('inf') ?
         for i in xrange(0, img_width - tile_width):
             for j in xrange(0, img_height - tile_height):
                 sub_img = img[i:(i + tile_width), j:(j + tile_height)]
