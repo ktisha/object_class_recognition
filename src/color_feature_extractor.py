@@ -2,7 +2,7 @@ import cv2
 from feature_extractor import FeatureExtractor
 import numpy as np
 import warnings
-
+from itertools import izip
 
 class ColorFeatureExtractor(FeatureExtractor):
     def __init__(self, n=10, chanel_h=10, chanel_s=10, chanel_v=10):
@@ -12,6 +12,12 @@ class ColorFeatureExtractor(FeatureExtractor):
         self.n = n
 
     def extract(self, image):
+        """
+        Extract color feature vector from image
+        :param image: cv2 image
+        :return: vector of bool with length = n * count of h chanel parts * count of s chanel parts *
+                 * count v chanel parts, where n is count of image parts.
+        """
         if image.shape[0] < self.n or image.shape[1] < self.n:
             raise Exception("size of image must be bigger then n")
         if len(image) % self.n:
@@ -21,25 +27,14 @@ class ColorFeatureExtractor(FeatureExtractor):
             feature_vector.extend(self._get_feature_vector(part_of_image).tolist())
         return feature_vector
 
-    #
-    # def set_paremeter(self, n=1, _chanel_h=6, _chanel_s=6, _chanel_v=6):
-    # """
-    #     :param n:
-    #     :param _chanel_h:
-    #     :param _chanel_s:
-    #     :param _chanel_v:
-    #     """
-    #     self._chanel_h = _chanel_h
-    #     self._chanel_s = _chanel_s
-    #     self._chanel_v = _chanel_v
-    #     self.n = n
 
     def _partition_image_generator(self, image):
         """
         :param image: square cv2 image
         :return: part of image, converted to HSV color space
         """
-        hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV_FULL)
+        #hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV_FULL)
+        hsv_image = image
         image_size = len(image)
         part_size = image_size // self.n
         for up_left, up_right in zip(xrange(0, image_size, part_size),
@@ -62,28 +57,17 @@ class ColorFeatureExtractor(FeatureExtractor):
                 s_chanel_coordinate = s // round(256. / self._chanel_s)
                 v_chanel_coordinate = v // round(256. / self._chanel_v)
                 pixel_feature[h_chanel_coordinate, s_chanel_coordinate, v_chanel_coordinate] = 1
-        return pixel_feature.reshape((self._chanel_h * self._chanel_s * self._chanel_v))
+        return pixel_feature.reshape(self._chanel_h * self._chanel_s * self._chanel_v)
 
-
-        # def _partirion_of_color_space(self):
-        #     _chanel_h_range = 360
-        #     _chanel_s_range = 256
-        #     _chanel_v_range = 256
-        #     _chanel_h_step = _chanel_h_range // self._chanel_h
-        #     _chanel_s_step = _chanel_s_range // self._chanel_s
-        #     _chanel_v_step = _chanel_v_range // self._chanel_v
-        #     _chanel_h_partition = [i for i in xrange(0 + _chanel_h_step, _chanel_h_range + _chanel_h_step, _chanel_h_step)]
-        #     _chanel_s_partition = [i for i in xrange(0 + _chanel_s_step, _chanel_s_range + _chanel_s_step, _chanel_s_step)]
-        #     _chanel_v_partition = [i for i in xrange(0 + _chanel_v_step, _chanel_v_range + _chanel_v_step, _chanel_s_step)]
-        #     return [_chanel_h_partition, _chanel_s_partition, _chanel_v_partition]
-        #
-        #
-        # def _images(self):
-        # '''
-        # :return: next available image in np.ndarray
-        #     '''
-        #     images = self.il.available_images()
-        #     for image in images:
-        #        yield self.il.load(image)
-
+    def _partirion_of_color_space(self):
+        _chanel_h_range = 360
+        _chanel_s_range = 256
+        _chanel_v_range = 256
+        _chanel_h_step = _chanel_h_range // self._chanel_h
+        _chanel_s_step = _chanel_s_range // self._chanel_s
+        _chanel_v_step = _chanel_v_range // self._chanel_v
+        _chanel_h_partition = [i for i in xrange(0 + _chanel_h_step, _chanel_h_range + _chanel_h_step, _chanel_h_step)]
+        _chanel_s_partition = [i for i in xrange(0 + _chanel_s_step, _chanel_s_range + _chanel_s_step, _chanel_s_step)]
+        _chanel_v_partition = [i for i in xrange(0 + _chanel_v_step, _chanel_v_range + _chanel_v_step, _chanel_s_step)]
+        return [_chanel_h_partition, _chanel_s_partition, _chanel_v_partition]
 
