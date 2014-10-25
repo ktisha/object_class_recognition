@@ -21,7 +21,7 @@ def train(images, responses):
     classifier = SVMClassifier(params.svm_params, params.svm_save_file)
 
     solve_container = SolveContainer(classifier, texture_feature_extractor)
-    test_data = [texture_feature_extractor.extract(img) for img in images] # or map(texture_feature_extractor.extract, images)?
+    test_data = [texture_feature_extractor.extract(img) for img in images]
     classifier.train(test_data, responses)
 
 

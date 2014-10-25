@@ -33,8 +33,8 @@ class ColorFeatureExtractor(FeatureExtractor):
         :param image: square cv2 image
         :return: part of image, converted to HSV color space
         """
-        #hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV_FULL)
-        hsv_image = image
+        hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV_FULL)
+        #hsv_image = image
         image_size = len(image)
         part_size = image_size // self.n
         for up_left, up_right in zip(xrange(0, image_size, part_size),
