@@ -2,6 +2,9 @@ data/train/
 data/train.zip
 .idea/
 venv/
+build/
 *.pyc
 src/loader_test.py
+*.c
+*.so
 src/cache

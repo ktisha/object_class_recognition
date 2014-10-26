@@ -6,6 +6,7 @@ from numpy.lib.function_base import average
 from numpy import amax
 
 from feature_extractor import FeatureExtractor
+from texture_feature_extractor_functions import _image_tile_distance
 
 
 class TextureFeatureExtractor(FeatureExtractor):
@@ -15,7 +16,7 @@ class TextureFeatureExtractor(FeatureExtractor):
     features = tfe.extract(img) # very slow method
     7 second for extracting one feature
     '''
-    def __init__(self, image_loader, tile_size=50, tiles_count=1,
+    def __init__(self, image_loader, tile_size=5, tiles_count=10,
                  images_for_tailing_count=500, delta=80.0, debug=False):
         self.il = image_loader
         self.tile_size = tile_size
@@ -25,9 +26,11 @@ class TextureFeatureExtractor(FeatureExtractor):
         self.debug = debug
 
     def extract(self, img):
-        features = []
+        features =[]
         for tile in self.tiles:
-            features.append(self._img_tile_distance(img, tile))
+            print('python: {}'.format(self._img_tile_distance(img, tile)))
+            print('cython: {}'.format(_image_tile_distance(img.astype('float'), tile.astype('float'))))
+            #features.append(_image_tile_distance(img.astype('float'), tile.astype('float')))
         return features
 
     def _img_tile_distance(self, img, tile):
@@ -39,8 +42,8 @@ class TextureFeatureExtractor(FeatureExtractor):
         :return: distance in (0 ... sqrt(255**2 + 255**2 + 255**2))
         math.sqrt(255**2 + 255**2 + 255**2) = 441.67
         '''
-        (img_height, img_width) = img.shape[0:2]
-        (tile_height, tile_width) = tile.shape[0:2]
+        img_height, img_width = img.shape[0:2]
+        tile_height, tile_width = tile.shape[0:2]
         result = sys.float_info.max
         for i in xrange(0, img_width - tile_width):
             for j in xrange(0, img_height - tile_height):
