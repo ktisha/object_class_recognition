@@ -1,3 +1,4 @@
+import cv2
 import random
 import sys
 
@@ -16,8 +17,8 @@ class TextureFeatureExtractor(FeatureExtractor):
     features = tfe.extract(img) # very slow method
     7 second for extracting one feature
     '''
-    def __init__(self, image_loader, tile_size=5, tiles_count=10,
-                 images_for_tailing_count=500, delta=80.0, debug=False):
+    def __init__(self, image_loader, tile_size=5, tiles_count=1000,
+                 images_for_tailing_count=500, delta=0.0, debug=False):
         self.il = image_loader
         self.tile_size = tile_size
         self.tiles_count = tiles_count
@@ -28,9 +29,11 @@ class TextureFeatureExtractor(FeatureExtractor):
     def extract(self, img):
         features =[]
         for tile in self.tiles:
-            print('python: {}'.format(self._img_tile_distance(img, tile)))
-            print('cython: {}'.format(_image_tile_distance(img.astype('float'), tile.astype('float'))))
-            #features.append(_image_tile_distance(img.astype('float'), tile.astype('float')))
+            # print('python: {}'.format(self._img_tile_distance(img, tile)))
+            # print('cython: {}'.format(_image_tile_distance(img, tile)))
+            # cv2.imshow('test_tile_tile_distance', tile)
+            # cv2.waitKey()
+            features.append(_image_tile_distance(img, tile))
         return features
 
     def _img_tile_distance(self, img, tile):
