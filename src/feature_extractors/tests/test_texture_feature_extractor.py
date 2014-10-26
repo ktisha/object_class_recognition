@@ -7,7 +7,7 @@ import src.feature_extractors.texture_feature_extractor as TFE
 import cProfile
 
 def test():
-    il = ImageLoader(image_dir_path='../data/train')
+    il = ImageLoader(image_dir_path='../../../data/train')
     tfe = TFE.TextureFeatureExtractor(il)
     tfe.generate_tiles()
     img = il.load(il.available_images()[0])

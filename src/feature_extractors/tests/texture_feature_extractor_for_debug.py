@@ -1,14 +1,13 @@
 import random
 import sys
 import math
-import numba
 import numpy.core.umath_tests as nt
 import numpy as np
 from numpy.linalg import norm
 from numpy.lib.function_base import average
 from numpy import amax
 
-from .. feature_extractor import FeatureExtractor
+from src.feature_extractors.feature_extractor import FeatureExtractor
 
 
 class TextureFeatureExtractor(FeatureExtractor):

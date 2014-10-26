@@ -1,8 +1,9 @@
-from src.image_loader import ImageLoader
-from src.tests.texture_feature_extractor_for_debug import TextureFeatureExtractor
+from src.image_loader.image_loader import ImageLoader
+
+from texture_feature_extractor_for_debug import TextureFeatureExtractor
 
 
-il = ImageLoader(image_dir_path='../../data/train')
+il = ImageLoader(image_dir_path='../../../data/train')
 tfe = TextureFeatureExtractor(il)
 tfe._debug_generate_tiles()
 img = il.load(il.available_images()[0])
