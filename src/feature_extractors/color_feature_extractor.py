@@ -5,7 +5,6 @@ import warnings
 from itertools import izip
 from math import ceil
 
-
 class ColorFeatureExtractor(FeatureExtractor):
     def __init__(self, parts_number=1, chanel_h=10, chanel_s=10, chanel_v=10, ):
         """
@@ -37,16 +36,15 @@ class ColorFeatureExtractor(FeatureExtractor):
         if len(image) % self.parts_number:
             warnings.warn("Warning: parts_number is not multiple of linear image size")
 
-        subvector_lenght = self._chanel_h * self._chanel_s * self._chanel_v
-        length_of_result = subvector_lenght * self.parts_number**2
+        subvector_length = self._chanel_h * self._chanel_s * self._chanel_v
+        length_of_result = subvector_length * self.parts_number**2
         feature_vector = np.empty((length_of_result,), dtype=bool)
-        indexes = (i for i in xrange(0, length_of_result, subvector_lenght))
+        indexes = (i for i in xrange(0, length_of_result, subvector_length))
 
         for idx, part_of_image in izip(indexes, self._partition_image_generator(image)):
             subvector = self._get_feature_vector(part_of_image)
             for i, value in enumerate(subvector):
                 feature_vector[idx + i] = value
-
         return feature_vector
 
     def _partition_image_generator(self, image):
@@ -73,15 +71,19 @@ class ColorFeatureExtractor(FeatureExtractor):
         :return: feature array of bool
         """
         pixel_feature = np.zeros((self._chanel_h, self._chanel_s, self._chanel_v), np.bool)
+        h_range = np.int(ceil(np.float32(self.h_range) / np.float32(self._chanel_h)))
+        s_range = np.int(ceil(np.float32(self.s_range) / np.float32(self._chanel_s)))
+        v_range = np.int(ceil(np.float32(self.v_range) / np.float32(self._chanel_v)))
 
         for i in xrange(image.shape[0]):
             for j in xrange(image.shape[1]):
                 h, s, v = image[i, j]
-                h_chanel_coordinate = h // ceil(self.h_range / float(self._chanel_h))
-                s_chanel_coordinate = s // ceil(self.s_range / float(self._chanel_s))
-                v_chanel_coordinate = v // ceil(self.v_range / float(self._chanel_v))
+                h_chanel_coordinate = np.int(h) // h_range
+                s_chanel_coordinate = np.int(s) // s_range
+                v_chanel_coordinate = np.int(v) // v_range
                 pixel_feature[h_chanel_coordinate, s_chanel_coordinate, v_chanel_coordinate] = True
-        return pixel_feature.reshape(self._chanel_h * self._chanel_s * self._chanel_v)
+        result = pixel_feature.reshape(self._chanel_h * self._chanel_s * self._chanel_v)
+        return result
 
     def _partition_of_color_space(self):
         _chanel_h_step = self.h_range // self._chanel_h
