@@ -1,5 +1,6 @@
 __author__ = 'Andrey Lazarevich'
 import cv2
+import numpy
 import os
 
 
@@ -62,6 +63,7 @@ def get_conts(gray):
 class ImageLoader:
     def __init__(self, image_dir_path=os.getcwd(), cut_size=250, haarcascade_path='haarcascade_eye.xml'):
         self.haarcascade_name = haarcascade_path
+        self.min_cont_len = 100
         self.cascade = []
         self.__init_haar()
         assert isinstance(cut_size, int)
@@ -69,7 +71,7 @@ class ImageLoader:
         self.image_ext = [".jpg", ".png", ".bmp"]
         self.image_dir_path = image_dir_path
         self.image_dir = self.__init_image_dir()
-        self.cache_dir_path = os.path.join(os.getcwd(), 'cache')
+        self.cache_dir_path = os.path.join('../data', 'cache')
         self.cache_dir = []
         self.__init_cache_dir()
 
@@ -89,8 +91,10 @@ class ImageLoader:
                 cutted_image = self.__simple_cut(image)
             else:
                 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                bound_rects = get_rects(gray)
-                x_local, y_local = self.__find_approx_center_in_rect_by_eyes(gray, bound_rects)
+                # bound_rects = get_rects(gray)
+                # x_local, y_local = self.__find_approx_center_in_rect_by_eyes(gray, bound_rects)
+                conts = get_conts(gray)
+                x_local, y_local = self.__find_approx_center_in_conts_by_mass_center(conts)
                 if x_local and y_local:
                     cutted_image = self.__smart_cut(x_local, y_local, image)
                 else:
@@ -188,17 +192,21 @@ class ImageLoader:
         if valid_rects:
             x_local /= valid_rects
             y_local /= valid_rects
-        else:
-            pass
         return x_local, y_local
 
     def __find_approx_center_in_conts_by_mass_center(self, conts):
         center_x = 0
         center_y = 0
+        centers = []
         for cont in conts:
-            m = cv2.moments(cont)
-            center_x += int(m['m10']/m['m00'])
-            center_y += int(m['m01']/m['m00'])
-        center_x /= len(conts)
-        center_y /= len(conts)
+            if cont.size > self.min_cont_len:
+                m = cv2.moments(cont)
+                cx = int(m['m10']/m['m00'])
+                cy = int(m['m01']/m['m00'])
+                centers.append((cx, cy))
+        for center in centers:
+            center_x += center[0]
+            center_y += center[1]
+        center_x /= len(centers)
+        center_y /= len(centers)
         return center_x, center_y
