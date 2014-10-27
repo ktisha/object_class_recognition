@@ -25,7 +25,8 @@ class ColorFeatureExtractor(FeatureExtractor):
         feature_vector = []
         for part_of_image in self._partition_image_generator(image):
             feature_vector.extend(self._get_feature_vector(part_of_image).tolist())
-        return feature_vector
+        feature_nparray = np.asarray(feature_vector)
+        return feature_nparray
 
 
     def _partition_image_generator(self, image):
