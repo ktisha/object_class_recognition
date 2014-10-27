@@ -1,28 +1,29 @@
 __author__ = 'avesloguzova'
-from image_loader import ImageLoader
-from texture_feature_extractor import TextureFeatureExtractor
+from image_loader import image_loader as il
+from feature_extractors import color_feature_extractor as cfexr
+
 from svm_classifier import SVMClassifier
-from solve_container import SolveContainer
+from solution_container import SolutionContainer
 import params
 
 
 def train(images, responses):
     """
-        Start trainig for classifier
+        Start training for classifier
         :param
         images: names of images
         responses: expected responses for images
-        """
-    image_loader = ImageLoader(params.image_dir)
-
-    texture_feature_extractor = TextureFeatureExtractor(image_loader)
-    texture_feature_extractor.generate_tiles()
-
-    classifier = SVMClassifier(params.svm_params, params.svm_save_file)
-
-    solve_container = SolveContainer(classifier, texture_feature_extractor)
-    test_data = [texture_feature_extractor.extract(img) for img in images]
+    """
+    image_loader = il.ImageLoader(params.image_dir)
+    # texture_feature_extractor = TextureFeatureExtractor(image_loader, params.tile_size, params.tiles_count,
+    # params.images_for_tailing_count, params.delta, False)
+    # texture_feature_extractor.generate_tiles()
+    color_feature_extractor = cfexr.ColorFeatureExtractor()
+    classifier = SVMClassifier(params.svm_params)
+    solve_container = SolutionContainer(classifier, color_feature_extractor)
+    test_data = [color_feature_extractor.extract(image_loader.load(img)) for img in images]
     classifier.train(test_data, responses)
+    return solve_container
 
 
 
