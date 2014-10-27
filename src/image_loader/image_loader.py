@@ -61,7 +61,7 @@ def get_conts(gray):
 
 
 class ImageLoader:
-    def __init__(self, image_dir_path=os.getcwd(), cut_size=250, haarcascade_path='haarcascade_eye.xml'):
+    def __init__(self, image_dir_path, cut_size=250, haarcascade_path='haarcascade_eye.xml'):
         self.haarcascade_name = haarcascade_path
         self.min_cont_len = 100
         self.cascade = []
@@ -71,7 +71,7 @@ class ImageLoader:
         self.image_ext = [".jpg", ".png", ".bmp"]
         self.image_dir_path = image_dir_path
         self.image_dir = self.__init_image_dir()
-        self.cache_dir_path = os.path.join('../data', 'cache')
+        self.cache_dir_path = os.path.join(image_dir_path, '../cache')
         self.cache_dir = []
         self.__init_cache_dir()
 
