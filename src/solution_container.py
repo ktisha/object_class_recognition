@@ -11,15 +11,11 @@ class SolutionContainer(object):
         Serialize object
         :return:
         """
-        self.features_extractor.serialize()
-        self.classifier.serialize()
+        self.features_extractor.serialize(filename)
+        self.classifier.serialize(filename)
 
     def deserialize(self, filename):
-        self.features_extractor.deserialize()
-        self.classifier.deserialize()
+        pass
 
-    def get_classifier(self):
-        return self.classifier
-
-    def get_extractor(self):
-        return self.features_extractor
+    def process(self, img):
+        return self.classifier.classify(self.features_extractor.extract(img))
