@@ -5,7 +5,7 @@ import warnings
 from itertools import izip
 
 class ColorFeatureExtractor(FeatureExtractor):
-    def __init__(self, n=10, chanel_h=10, chanel_s=10, chanel_v=10):
+    def __init__(self, n=5, chanel_h=10, chanel_s=6, chanel_v=6):
         self._chanel_h = chanel_h
         self._chanel_s = chanel_s
         self._chanel_v = chanel_v
@@ -25,7 +25,8 @@ class ColorFeatureExtractor(FeatureExtractor):
         feature_vector = []
         for part_of_image in self._partition_image_generator(image):
             feature_vector.extend(self._get_feature_vector(part_of_image).tolist())
-        return feature_vector
+        feature_nparray = np.asarray(feature_vector)
+        return feature_nparray
 
 
     def _partition_image_generator(self, image):
