@@ -1,10 +1,11 @@
 data/train/
+data/cache/
 data/train.zip
 .idea/
 venv/
 build/
 *.pyc
-src/loader_test.py
+src/image_loader/loader_test.py
 *.c
 *.so
 src/cache
