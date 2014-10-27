@@ -14,8 +14,7 @@ class TextureFeatureExtractor(FeatureExtractor):
     ''' usecase:
     tfe = TextureFeatureExtractor()
     tfe.generate_tiles() # slow method
-    features = tfe.extract(img) # very slow method
-    7 second for extracting one feature
+    features = tfe.extract(img) #
     '''
     def __init__(self, image_loader, tile_size=5, tiles_count=1000,
                  images_for_tailing_count=500, delta=0.0, debug=False):
@@ -29,41 +28,8 @@ class TextureFeatureExtractor(FeatureExtractor):
     def extract(self, img):
         features =[]
         for tile in self.tiles:
-            # print('python: {}'.format(self._img_tile_distance(img, tile)))
-            # print('cython: {}'.format(_image_tile_distance(img, tile)))
-            # cv2.imshow('test_tile_tile_distance', tile)
-            # cv2.waitKey()
             features.append(_image_tile_distance(img, tile))
         return features
-
-    def _img_tile_distance(self, img, tile):
-        '''
-        distance between img and tile is defined as min of
-        distances between tile and all sub-images of img
-        :param img:
-        :param tile:
-        :return: distance in (0 ... sqrt(255**2 + 255**2 + 255**2))
-        math.sqrt(255**2 + 255**2 + 255**2) = 441.67
-        '''
-        img_height, img_width = img.shape[0:2]
-        tile_height, tile_width = tile.shape[0:2]
-        result = sys.float_info.max
-        for i in xrange(0, img_width - tile_width):
-            for j in xrange(0, img_height - tile_height):
-                sub_img = img[i:(i + tile_width), j:(j + tile_height)]
-                dst = self._sub_img_tile_distance(tile, sub_img)
-                result = min(dst, result)
-        return result
-
-    def _sub_img_tile_distance(self, tile, sub_img):
-        '''
-        distance between a sub-image and a texture tile are defined
-        as the maximum of Euclidian distance between their pixels in RGB
-        :param tile:
-        :param sub_img:
-        :return: distance
-        '''
-        return amax(norm(tile.astype(float) - sub_img.astype(float), axis=2).flat)
 
     def _tile_tile_distance(self, tile1, tile2):
         '''
