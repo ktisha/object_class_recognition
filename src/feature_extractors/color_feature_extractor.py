@@ -5,7 +5,7 @@ import warnings
 from itertools import izip
 
 class ColorFeatureExtractor(FeatureExtractor):
-    def __init__(self, n=10, chanel_h=10, chanel_s=10, chanel_v=10):
+    def __init__(self, n=5, chanel_h=10, chanel_s=6, chanel_v=6):
         self._chanel_h = chanel_h
         self._chanel_s = chanel_s
         self._chanel_v = chanel_v
