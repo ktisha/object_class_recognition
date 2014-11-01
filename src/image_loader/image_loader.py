@@ -65,8 +65,11 @@ def get_conts(gray):
         if len(contours[i]) > len(contours[max_contour_1]):
             max_contour_2 = max_contour_1
             max_contour_1 = i
-    rect_1 = cv2.boundingRect(contours[max_contour_1])
-    rect_2 = cv2.boundingRect(contours[max_contour_2])
+    if contours:
+        rect_1 = cv2.boundingRect(contours[max_contour_1])
+        rect_2 = cv2.boundingRect(contours[max_contour_2])
+    else:
+        return conts
     if nested_rect(rect_2, rect_1):
         conts.append(contours[max_contour_2])
         return conts
