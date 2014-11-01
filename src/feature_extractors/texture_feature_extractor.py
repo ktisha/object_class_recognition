@@ -1,21 +1,10 @@
-import cv2
 import random
-import sys
-
-from numpy.linalg import norm
-from numpy.lib.function_base import average
-from numpy import amax
 
 from feature_extractor import FeatureExtractor
-from texture_feature_extractor_functions import _image_tile_distance
+from texture_feature_extractor_functions import _image_tile_distance, _tile_tile_distance
 
 
 class TextureFeatureExtractor(FeatureExtractor):
-    ''' usecase:
-    tfe = TextureFeatureExtractor()
-    tfe.generate_tiles() # slow method
-    features = tfe.extract(img) #
-    '''
     def __init__(self, image_loader, tile_size=5, tiles_count=1000,
                  images_for_tailing_count=500, delta=0.0, debug=False):
         self.il = image_loader
@@ -31,20 +20,9 @@ class TextureFeatureExtractor(FeatureExtractor):
             features.append(_image_tile_distance(img, tile))
         return features
 
-    def _tile_tile_distance(self, tile1, tile2):
-        '''
-        we define distance between two tiles as the average
-         Euclidian distance between the pixels of the tiles in RGB(0..255, 0..255, 0..255)
-        :param tile1:
-        :param tile2:
-        :return: distance in (0 ... sqrt(255**2 + 255**2 + 255**2))
-        math.sqrt(255**2 + 255**2 + 255**2) = 441.67
-        '''
-        return average(norm(tile1.astype(float) - tile2.astype(float), axis=2))
-
     def _check_same_tile_exist(self, new_tile):
         for tile in self.tiles:
-            dst = self._tile_tile_distance(tile, new_tile)
+            dst = _tile_tile_distance(tile, new_tile)
             self._debug_print('dst: {}'.format(dst))
             if dst < self.delta:
                 return True

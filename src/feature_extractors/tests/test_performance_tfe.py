@@ -8,13 +8,16 @@ import cProfile
 
 def test():
     il = ImageLoader(image_dir_path='../../../data/train')
-    tfe = TFE.TextureFeatureExtractor(il, tiles_count=100, images_for_tailing_count=500, delta=0.0)
+    tfe = TFE.TextureFeatureExtractor(il, tiles_count=1000, images_for_tailing_count=2000, delta=0.0, debug=False)
+    start = time.time()
     tfe.generate_tiles()
+    stop = time.time()
+    print('tile generation: {}'.format(stop - start))
     img = il.load(il.available_images()[0])
     start = time.time()
     print(tfe.extract(img))
     stop = time.time()
-    print('elapsed time: {}'.format(stop - start))
+    print('extraction: {}'.format(stop - start))
     #cv2.imshow('test_tile_tile_distance', img)
     #cv2.waitKey()
     #cv2.destroyAllWindows()
