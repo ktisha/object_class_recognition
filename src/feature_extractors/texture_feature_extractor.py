@@ -2,6 +2,8 @@ import cv2
 import random
 import sys
 
+
+
 from numpy.linalg import norm
 from numpy.lib.function_base import average
 from numpy import amax
@@ -25,7 +27,7 @@ class TextureFeatureExtractor(FeatureExtractor):
         self.delta = delta
         self.debug = debug
 
-    def extract(self, img):
+    def _extract(self, img):
         features =[]
         for tile in self.tiles:
             features.append(_image_tile_distance(img, tile))

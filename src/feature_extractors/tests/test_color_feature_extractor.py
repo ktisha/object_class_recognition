@@ -52,3 +52,19 @@ if DEBUG:
             print(len(color_feature))
             print(h * s * v * parts ** 2)
             raise Exception("Error with h= {0} s= {1}, v= {2}, parts= {3} :".format(h, s, v, parts))
+        print(len(color_feature))
+
+
+i_loader = ImageLoader(image_dir_path='../data/train')
+available_image = i_loader.available_images()
+image = i_loader.load(available_image[0])
+extractor = ColorFeatureExtractor(parts_number=10, chanel_h=10, chanel_s=6, chanel_v=6)
+def run():
+    v = extractor.extract(image)
+    print(len(v))
+
+cProfile.run("run()", sort=True)
+
+
+import cProfile
+#cProfile.run("test()")
