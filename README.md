@@ -7,3 +7,9 @@ The training archive contains 25,000 images of dogs and cats. It's quite a big a
 Use 
 zip -F data.zip --out train.zip 
 to recreate full train archive.
+
+Deployment:
+
+0. Install OpenCV
+1. `pip install -r requirements.txt`
+2. `./build.sh`
