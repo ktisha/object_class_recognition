@@ -2,27 +2,44 @@ __author__ = 'avesloguzova'
 
 import cv2
 
+import numpy as np
+
 
 class SVMClassifier(object):
-    def __init__(self, params, save_file):
+    def __init__(self, params):
         self.svm = cv2.SVM()
         self.params = params
-        self.save_file = save_file
 
-    def train(self, train_data, responses):
+    def train(self, data, responses):
         """
         Train SVM classifier
-        :param train_data is array of features, responses is array of responses
+        :param data is array of features
+        :param responses is array of responses
         """
-        self.svm.train(train_data, responses, self.params)
-        self.svm.save(self.save_file)
+        training_data = np.float32(data)
+        training_responses = np.float32(responses)
+        self.svm.train(training_data, training_responses, params=self.params)
 
+    def serialize(self, save_file):
+        """
+        save results of training to file
+        :param save_file: path to file
+        """
 
-    def classify(self, test_data):
+        self.svm.save(save_file)
+
+    def deserialize(self, save_file):
+        """
+        load previous results of training from file
+        :param save_file: path to file
+        """
+        self.svm.load(save_file)
+
+    def classify(self, data):
         """
         Classify object with SVM method
-        :param features: test_data is list of features
+        :param data is array of numpy array of float32
         :return:
         """
-        self.svm.load(self.save_file)
-        return self.svm.svm.predict_all(test_data)
+        test_data = np.float32(data)
+        return self.svm.predict(test_data)

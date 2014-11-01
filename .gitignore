@@ -9,3 +9,6 @@ src/image_loader/loader_test.py
 *.c
 *.so
 src/cache
+src/image_loader/haarcascade_test.py
+src/image_loader/haarcascade.xml
+src/image_loader/cat_log.txt
