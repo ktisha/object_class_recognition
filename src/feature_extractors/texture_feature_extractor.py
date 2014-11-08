@@ -1,6 +1,8 @@
 import random
 
 import numpy as np
+import cv2
+import cv
 
 from feature_extractor import FeatureExtractor
 from texture_feature_extractor_functions import _image_tile_distance, _tile_tile_distance
@@ -16,10 +18,16 @@ class TextureFeatureExtractor(FeatureExtractor):
         self.delta = delta
         self.debug = debug
 
+    def _image_tile_distance_opencv(self, img, tile):
+        result = cv2.matchTemplate(img, tile, cv.CV_TM_SQDIFF_NORMED)
+
+        min = cv2.minMaxLoc(result)[0]
+        return min
+
     def _extract(self, img):
         features = np.empty((self.tiles_count,), dtype=float)
         for index, tile in  enumerate(self.tiles):
-            features[index] = _image_tile_distance(img, tile)
+            features[index] = self._image_tile_distance_opencv(img, tile)
         return features
 
     def _check_same_tile_exist(self, new_tile):

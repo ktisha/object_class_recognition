@@ -15,7 +15,7 @@ def test():
     print('tile generation: {}'.format(stop - start))
     img = il.load(il.available_images()[0])
     start = time.time()
-    print(tfe.extract(img))
+    tfe.extract(img)
     stop = time.time()
     print('extraction: {}'.format(stop - start))
     #cv2.imshow('test_tile_tile_distance', img)
@@ -26,7 +26,7 @@ def test():
 def main():
     use_cprofile = True
     if use_cprofile:
-        cProfile.run('test()')
+        cProfile.run('test()',sort=True)
     else:
         test()
 
