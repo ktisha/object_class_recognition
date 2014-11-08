@@ -1,6 +1,5 @@
-import time
+import numpy as np
 
-import cv2
 from src.image_loader.image_loader import ImageLoader
 from src.feature_extractors.texture_feature_extractor import TextureFeatureExtractor
 
@@ -44,9 +43,9 @@ def _sub_img_tile_distance(self, tile, sub_img):
 
 
 def py_extract(self, img):
-    features = []
-    for tile in self.tiles:
-        features.append(self._img_tile_distance(img, tile))
+    features = np.empty((self.tiles_count,), dtype=float)
+    for index, tile in  enumerate(self.tiles):
+        features[index] = self._img_tile_distance(img, tile)
     return features
 
 

@@ -1,5 +1,7 @@
 import random
 
+import numpy as np
+
 from feature_extractor import FeatureExtractor
 from texture_feature_extractor_functions import _image_tile_distance, _tile_tile_distance
 
@@ -15,9 +17,9 @@ class TextureFeatureExtractor(FeatureExtractor):
         self.debug = debug
 
     def _extract(self, img):
-        features =[]
-        for tile in self.tiles:
-            features.append(_image_tile_distance(img, tile))
+        features = np.empty((self.tiles_count,), dtype=float)
+        for index, tile in  enumerate(self.tiles):
+            features[index] = _image_tile_distance(img, tile)
         return features
 
     def _check_same_tile_exist(self, new_tile):
