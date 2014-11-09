@@ -20,19 +20,19 @@ class TextureFeatureExtractor(FeatureExtractor):
 
     def _image_tile_distance_opencv(self, img, tile):
         result = cv2.matchTemplate(img, tile, cv.CV_TM_SQDIFF_NORMED)
-
         min = cv2.minMaxLoc(result)[0]
         return min
 
     def _extract(self, img):
+        gray_image = cv2.cvtColor(img, cv.CV_BGR2GRAY)
         features = np.empty((self.tiles_count,), dtype=float)
         for index, tile in  enumerate(self.tiles):
-            features[index] = self._image_tile_distance_opencv(img, tile)
+            features[index] = self._image_tile_distance_opencv(gray_image, tile)
         return features
 
     def _check_same_tile_exist(self, new_tile):
         for tile in self.tiles:
-            dst = _tile_tile_distance(tile, new_tile)
+            dst = cv2.minMaxLoc(cv2.absdiff(tile, new_tile))[0]#_tile_tile_distance(tile, new_tile)
             self._debug_print('dst: {}'.format(dst))
             if dst < self.delta:
                 return True
@@ -48,7 +48,7 @@ class TextureFeatureExtractor(FeatureExtractor):
         available_images_names = self.il.available_images()
         images_for_tailing_names = random.sample(available_images_names, self.images_for_tailing_count)
         for img_name in images_for_tailing_names:
-            img = self.il.load(img_name)
+            img = cv2.cvtColor(self.il.load(img_name), cv.CV_BGR2GRAY)
             new_tiles = self._divide_img_by_tiles(img)
             for new_tile in new_tiles:
                 if not self._check_same_tile_exist(new_tile):
