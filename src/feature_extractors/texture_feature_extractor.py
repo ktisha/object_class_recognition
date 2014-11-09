@@ -9,6 +9,7 @@ from texture_feature_extractor_functions import _image_tile_distance, _tile_tile
 class TextureFeatureExtractor(FeatureExtractor):
     def __init__(self, image_loader, tile_size=5, tiles_count=1000,
                  images_for_tailing_count=500, delta=0.0, debug=False):
+        super(TextureFeatureExtractor, self).__init__()
         self.il = image_loader
         self.tile_size = tile_size
         self.tiles_count = tiles_count
@@ -18,7 +19,7 @@ class TextureFeatureExtractor(FeatureExtractor):
 
     def _extract(self, img):
         features = np.empty((self.tiles_count,), dtype=float)
-        for index, tile in  enumerate(self.tiles):
+        for index, tile in enumerate(self.tiles):
             features[index] = _image_tile_distance(img, tile)
         return features
 

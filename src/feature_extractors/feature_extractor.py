@@ -7,6 +7,9 @@ import cPickle
 class FeatureExtractor(object):
     __metaclass__ = abc.ABCMeta
 
+    def __init__(self):
+        self._cache = {}
+
     def extract(self, img):
         """
         :param img: 250*250 opencv image
@@ -50,9 +53,6 @@ class FeatureExtractor(object):
         :param hash_code: md5 code of image
         :return: np.array if cached object exist, [] otherwise
         """
-        if not "_cache" in dir(self):
-            self._cache = {}
-            return []
         if hash_code in self._cache:
             return self._cache[hash_code]
         else:

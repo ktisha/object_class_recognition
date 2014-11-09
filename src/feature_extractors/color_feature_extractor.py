@@ -15,6 +15,7 @@ class ColorFeatureExtractor(FeatureExtractor):
         :param chanel_s: number of saturation chanel parts
         :param chanel_v: number of value chanel parts
         """
+        super(ColorFeatureExtractor, self).__init__()
         self._chanel_h = chanel_h
         self._chanel_s = chanel_s
         self._chanel_v = chanel_v
