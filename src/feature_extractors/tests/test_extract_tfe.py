@@ -7,6 +7,7 @@ import cProfile
 
 
 import sys
+import math
 from numpy.linalg import norm
 from numpy import amax
 
@@ -17,7 +18,7 @@ def _img_tile_distance(self, img, tile):
     distances between tile and all sub-images of img
     :param img:
     :param tile:
-    :return: distance in (0 ... sqrt(255**2 + 255**2 + 255**2))
+    :return: distance in (0 ... 1)
     math.sqrt(255**2 + 255**2 + 255**2) = 441.67
     """
     img_height, img_width = img.shape[0:2]
@@ -39,7 +40,7 @@ def _sub_img_tile_distance(self, tile, sub_img):
     :param sub_img:
     :return: distance
     """
-    return amax(norm(tile.astype(float) - sub_img.astype(float), axis=2).flat)
+    return amax(norm(tile.astype(float) - sub_img.astype(float), axis=2).flat) / math.sqrt(255.0**2 + 255.0**2 + 255.0**2)
 
 
 def py_extract(self, img):
@@ -54,7 +55,7 @@ def test():
     TextureFeatureExtractor._img_tile_distance = _img_tile_distance
     TextureFeatureExtractor._sub_img_tile_distance = _sub_img_tile_distance
     TextureFeatureExtractor.py_extract = py_extract
-    tfe = TextureFeatureExtractor(il, tiles_count=3, delta=50.0)
+    tfe = TextureFeatureExtractor(il, tiles_count=3, delta=0.3)
     tfe.generate_tiles()
     img = il.load(il.available_images()[100])
     print('python: {}'.format(tfe.py_extract(img)))
