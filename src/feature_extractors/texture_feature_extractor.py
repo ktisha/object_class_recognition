@@ -9,6 +9,7 @@ from texture_feature_extractor_functions import _image_tile_distance, _tile_tile
 class TextureFeatureExtractor(FeatureExtractor):
     def __init__(self, image_loader, images_for_tailing_names=None, tile_size=5,
                  tiles_count=1000, delta=0.0, debug=False):
+        super(TextureFeatureExtractor, self).__init__()
         self.il = image_loader
         self.tile_size = tile_size
         self.tiles_count = tiles_count
