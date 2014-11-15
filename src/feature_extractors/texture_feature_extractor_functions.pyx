@@ -13,7 +13,7 @@ cdef double euclidian_distance(double x1, double y1, double z1,
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def _image_tile_distance(np.ndarray[np.uint8_t, ndim=3] img, np.ndarray[np.uint8_t, ndim=3] tile):
-    '''
+    """
     25 seconds by 1000 calls
     *distance between img and tile is defined as min of
     distances between tile and all sub-images of img
@@ -23,7 +23,7 @@ def _image_tile_distance(np.ndarray[np.uint8_t, ndim=3] img, np.ndarray[np.uint8
     :param tile:
     :return: distance in (0 ... sqrt(255**2 + 255**2 + 255**2))
     math.sqrt(255**2 + 255**2 + 255**2) = 441.67
-    '''
+    """
     cdef size_t i, j
     cdef size_t x, y
     cdef float result = float('inf')
@@ -45,14 +45,14 @@ def _image_tile_distance(np.ndarray[np.uint8_t, ndim=3] img, np.ndarray[np.uint8
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def _tile_tile_distance(np.ndarray[np.uint8_t, ndim=3] tile1, np.ndarray[np.uint8_t, ndim=3] tile2):
-    '''
+    """
     we define distance between two tiles as the average
     Euclidian distance between the pixels of the tiles in RGB(0..255, 0..255, 0..255)
     :param tile1:
     :param tile2:
     :return: distance in (0 ... sqrt(255**2 + 255**2 + 255**2))
     math.sqrt(255**2 + 255**2 + 255**2) = 441.67
-    '''
+    """
     cdef float result = 0.0
     cdef float dst = 0.0
     for i in range(tile1.shape[0]):

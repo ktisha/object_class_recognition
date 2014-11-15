@@ -24,15 +24,16 @@ def _tile_tile_distance(self, tile1, tile2):
 
 def test():
     il = ImageLoader(image_dir_path='../../../data/train')
-    tfe = TFE.TextureFeatureExtractor(il, images_for_tailing_names=['cat.0.jpg', 'dog.0.jpg'], tiles_count=1000, delta=0.0, debug=False)
+    tfe = TFE.TextureFeatureExtractor(il, tiles_count=1000, delta=80.0, debug=True)
     start = time.time()
     tfe.generate_tiles()
     stop = time.time()
+    tfe.show_tiles()
     print('tile generation: {}'.format(stop - start))
 
 
 def main():
-    use_cprofile = True
+    use_cprofile = False
     if use_cprofile:
         cProfile.run('test()')
     else:

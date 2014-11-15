@@ -54,7 +54,7 @@ def test():
     TextureFeatureExtractor._img_tile_distance = _img_tile_distance
     TextureFeatureExtractor._sub_img_tile_distance = _sub_img_tile_distance
     TextureFeatureExtractor.py_extract = py_extract
-    tfe = TextureFeatureExtractor(il, tiles_count=3, delta=20.0)
+    tfe = TextureFeatureExtractor(il, tiles_count=3, delta=50.0)
     tfe.generate_tiles()
     img = il.load(il.available_images()[100])
     print('python: {}'.format(tfe.py_extract(img)))
