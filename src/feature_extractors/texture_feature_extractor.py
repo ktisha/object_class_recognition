@@ -7,14 +7,17 @@ from texture_feature_extractor_functions import _image_tile_distance, _tile_tile
 
 
 class TextureFeatureExtractor(FeatureExtractor):
-    def __init__(self, image_loader, tile_size=5, tiles_count=1000,
-                 images_for_tailing_count=500, delta=0.0, debug=False):
+    def __init__(self, image_loader, images_for_tailing_names=None, tile_size=5,
+                 tiles_count=1000, delta=0.0, debug=False):
         self.il = image_loader
         self.tile_size = tile_size
         self.tiles_count = tiles_count
-        self.images_for_tailing_count = images_for_tailing_count
+        if not images_for_tailing_names:
+            images_for_tailing_names = self.il.available_images()
+        self.images_for_tailing_names = images_for_tailing_names
         self.delta = delta
         self.debug = debug
+        self.tiles = []
 
     def _extract(self, img):
         features = np.empty((self.tiles_count,), dtype=float)
@@ -31,15 +34,12 @@ class TextureFeatureExtractor(FeatureExtractor):
         return False
 
     def generate_tiles(self):
-        '''
+        """
         generate tiles, and initialize self.tiles
         if images_for_tailing is too low raise exception
         :return:
-        '''
-        self.tiles = []
-        available_images_names = self.il.available_images()
-        images_for_tailing_names = random.sample(available_images_names, self.images_for_tailing_count)
-        for img_name in images_for_tailing_names:
+        """
+        for img_name in self.images_for_tailing_names:
             img = self.il.load(img_name)
             new_tiles = self._divide_img_by_tiles(img)
             for new_tile in new_tiles:
@@ -48,7 +48,8 @@ class TextureFeatureExtractor(FeatureExtractor):
                     self._debug_print('tiles count: {}'.format(len(self.tiles)))
                     if len(self.tiles) == self.tiles_count:
                         return
-        raise Exception('Tiles not generated')
+        if len(self.tiles) != self.tiles_count:
+            raise Exception('Tiles not generated')
 
     def _divide_img_by_tiles(self, img):
         tiles = []
