@@ -20,7 +20,7 @@ def generate_new_feature_extractor():
 def generate_cache():
     il = ImageLoader(image_dir_path='../../../data/train')
     tfe = TextureFeatureExtractor.load('texture_feature_extractor_delta=018')
-    images_for_caching = il.available_images()[:11]
+    images_for_caching = il.available_images()
     for num, image_name in enumerate(images_for_caching):
         img = il.load(image_name)
         tfe.extract(img)
@@ -31,12 +31,12 @@ def generate_cache():
 def test_cache():
     il = ImageLoader(image_dir_path='../../../data/train')
     tfe = TextureFeatureExtractor.load('texture_feature_extractor_cache_delta=018')
-    for image_name in il.available_images()[:11]:
+    for image_name in il.available_images():
         img = il.load(image_name)
         print(tfe.extract(img))
 
 
 if __name__ == '__main__':
-    generate_new_feature_extractor()
-    # generate_cache()
+    # generate_new_feature_extractor()
+    generate_cache()
     # cProfile.run('test_cache()')
