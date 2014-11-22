@@ -45,7 +45,7 @@ class TextureFeatureExtractor(FeatureExtractor):
         if images_for_tailing is too low raise exception
         :return:
         """
-        for img_name in self.images_for_tailing_names:
+        for used_images, img_name in enumerate(self.images_for_tailing_names):
             img = self.il.load(img_name)
             new_tiles = self._divide_img_by_tiles(img)
             for new_tile in new_tiles:
@@ -53,7 +53,7 @@ class TextureFeatureExtractor(FeatureExtractor):
                     self.tiles.append(new_tile)
                     self._debug_print('tiles count: {}'.format(len(self.tiles)))
                     if len(self.tiles) == self.tiles_count:
-                        return
+                        return used_images
         if len(self.tiles) != self.tiles_count:
             raise Exception('Tiles not generated')
 
