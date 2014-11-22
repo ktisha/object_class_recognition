@@ -1,5 +1,5 @@
 import abc
-import zlib
+import gzip
 import hashlib
 import cPickle
 
@@ -30,8 +30,9 @@ class FeatureExtractor(object):
         :param path to file
         :return: None
         """
-        with open(path, "w") as path:
-            cPickle.dump(self, path, 2)
+        with gzip.open(path, "wb") as file_out:
+            picled_self = cPickle.dumps(self, 2)
+            file_out.write(picled_self)
 
     @staticmethod
     def load(path):
@@ -40,8 +41,9 @@ class FeatureExtractor(object):
         :param path: path to file
         :return: feature extraction object
         """
-        with open(path, "r") as path:
-            return cPickle.load(path)
+        with gzip.open(path, "rb") as file_in:
+            pickle_file = file_in.read()
+            return cPickle.loads(pickle_file)
 
     @abc.abstractmethod
     def _extract(self, image):

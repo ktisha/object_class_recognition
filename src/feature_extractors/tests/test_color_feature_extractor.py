@@ -4,10 +4,11 @@ import cv2
 from src.image_loader.image_loader import ImageLoader
 import numpy as np
 from src.feature_extractors.color_feature_extractor import ColorFeatureExtractor
+from time import clock
+from src.feature_extractors.feature_extractor import  FeatureExtractor
 
 
-
-DEBUG = 1
+DEBUG = 0
 if DEBUG:
     color_extractor = ColorFeatureExtractor(parts_number=1, chanel_h=2, chanel_s=2, chanel_v=2)
     color_extractor._hsv = False
@@ -33,7 +34,7 @@ if DEBUG:
     if (color_feature != [0, 0, 1, 1, 0, 1, 1, 0]).all():
         assert "Wrong answer"
 
-    i_loader = ImageLoader(image_dir_path='../data/train')
+    i_loader = ImageLoader(image_dir_path='../../../data/train')
     available_image = i_loader.available_images()
     image = i_loader.load(available_image[0])
 
@@ -55,16 +56,39 @@ if DEBUG:
         print(len(color_feature))
 
 
-i_loader = ImageLoader(image_dir_path='../data/train')
-available_image = i_loader.available_images()
-image = i_loader.load(available_image[0])
-extractor = ColorFeatureExtractor(parts_number=10, chanel_h=10, chanel_s=6, chanel_v=6)
-def run():
-    v = extractor.extract(image)
-    print(len(v))
+def pickle_test():
+    i_loader = ImageLoader(image_dir_path='../../../data/train')
+    available_image = i_loader.available_images()[:10]
+    extractor = ColorFeatureExtractor(parts_number=10, chanel_h=10, chanel_s=6, chanel_v=6)
+    features = []
+    a = clock()
+    for img in available_image:
+        img_file = i_loader.load(img)
+        features.append(extractor.extract(img_file))
+    print("new extract", clock() - a)
+    extractor.save("color_feature_cacche_5_10_6_6.gz")
+    new_extractor = FeatureExtractor.load("color_feature_cacche_5_10_6_6.gz")
+    new_features = []
+    a = clock()
+    for img in available_image:
+        img_file = i_loader.load(img)
+        new_features.append(new_extractor.extract(img_file))
+    print("pickled extract: ", clock() - a)
+    print(features)
+    print(new_features)
 
-cProfile.run("run()", sort=True)
+
+def pickle_all():
+    i_loader = ImageLoader(image_dir_path='../../../data/train')
+    available_images = i_loader.available_images()
+    extractor = ColorFeatureExtractor(parts_number=5, chanel_h=10, chanel_s=6, chanel_v=6)
+    for i, img in enumerate(available_images):
+        img_file = i_loader.load(img)
+        extractor.extract(img_file)
+        if i % 100 == 0:
+            print(i)
+    extractor.save("color_feature_cacche_5_10_6_6.gz")
 
 
-import cProfile
-#cProfile.run("test()")
+pickle_all()
+
