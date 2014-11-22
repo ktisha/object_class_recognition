@@ -1,19 +1,35 @@
 __author__ = 'avesloguzova'
-from image_loader import image_loader as im
-import params
 
 
-def test(images, responses, solution_container):
-    """
-    Test result of training
-    :param images: list of images name
-    :param responses: list of responses
-    :param solution_container: object of SolutionContainer from solution_container
-    :return:
-    """
-    image_loader = im.ImageLoader(params.image_dir)
-    image_loader.load(images[0])
-    imgs = [image_loader.load(img) for img in images]
-    results = [solution_container.process(img) for img in imgs]
-    correct = sum(map(lambda x: x[0] == x[1], zip(results, responses))) * 100 / len(responses)
-    print correct
+class Tester(object):
+    @staticmethod
+    def default_quality(actual, excepted):
+        return float(sum(map(lambda x: x[0] == x[1], zip(actual, excepted)))) / len(actual)
+
+    def __init__(self, image_loader, solution_container, quality_function=default_quality):
+        self.image_loader = image_loader
+        self.solution_container = solution_container
+        self.quality = quality_function
+
+    def test(self, test_data):
+        """
+        Test result of training
+        :param test_data:
+        :return:
+        """
+
+        results = [self.test_image(item) for item, __ in test_data]
+        correct = Tester.default_quality(results, [excepted_response for __, excepted_response in test_data])
+        return correct
+
+    def test_image(self, image_name):
+        """
+        Classify single image
+        :param image_name: name of image in loader directory
+        :return: label of class for image
+        """
+        print("Test " + image_name)
+        img = self.image_loader.load(image_name)
+        res = self.solution_container.process(img)
+        print("result:" + str(res))
+        return res

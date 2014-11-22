@@ -6,23 +6,25 @@ base_path = ""
 
 # Params of training samples
 first_class_params = dict(prefix="cat.",
-                          count=12499,
+                          image_count=12499,
                           train_count=200,
-                          test_count=100,
-                          postfix=".jpg")
+                          test_count=5000,
+                          postfix=".jpg",
+                          label=1)
 
 second_class_params = dict(prefix="dog.",
-                           count=12499,
-                           train_count=200,
-                           test_count=100,
-                           postfix=".jpg")
+                           image_count=12499,
+                           train_count=202,
+                           test_count=5000,
+                           postfix=".jpg",
+                           label=-1)
 
 
 # Params of SVM
 svm_params = dict(kernel_type=cv2.SVM_LINEAR,
                   svm_type=cv2.SVM_C_SVC,
-                  C=2.67,
-                  gamma=5.383)
+                  C=100,
+                  gamma=0.001)
 
 svm_save_file = "svm_classifier.dat"
 
