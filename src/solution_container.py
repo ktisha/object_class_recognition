@@ -6,16 +6,17 @@ class SolutionContainer(object):
         self.classifier = classifier
         self.features_extractor = features_extractor
 
-    def serialize(self, filename):
+    def save(self, filename_classifier, filename_extractor):
         """
         Serialize object
         :return:
         """
-        self.features_extractor.serialize(filename)
-        self.classifier.serialize(filename)
+        self.features_extractor.save(filename_extractor)
+        self.classifier.save(filename_classifier)
 
-    def deserialize(self, filename):
-        pass
+    def load(self, filename_classifier, filename_extractor):
+        self.classifier.load(filename_classifier)
+        self.features_extractor.load(filename_extractor)
 
     def process(self, img):
         return self.classifier.classify(self.features_extractor.extract(img))

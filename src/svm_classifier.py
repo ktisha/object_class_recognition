@@ -20,7 +20,7 @@ class SVMClassifier(object):
         training_responses = np.float32(responses)
         self.svm.train(training_data, training_responses, params=self.params)
 
-    def serialize(self, save_file):
+    def save(self, save_file):
         """
         save results of training to file
         :param save_file: path to file
@@ -28,7 +28,7 @@ class SVMClassifier(object):
 
         self.svm.save(save_file)
 
-    def deserialize(self, save_file):
+    def load(self, save_file):
         """
         load previous results of training from file
         :param save_file: path to file
