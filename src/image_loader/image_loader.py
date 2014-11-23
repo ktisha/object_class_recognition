@@ -4,6 +4,24 @@ import numpy
 import os
 
 
+def is_nested_box(first, second):
+    """
+    Function defines nested bounding box
+    :param first: first box, should be smaller and be 'inside' second box
+    box is a tuple of 2 tuples, which contains (x, y) and (weight, height) params.
+    :param second: bound box for first box
+    :return: True or False. Depends on nested boxes or not
+    """
+    try:
+        if first[0][0] >= second[0][0] and first[0][1] >= second[0][1]:
+            if first[0][0] + first[1][0] <= second[0][0] + second[1][0]:
+                if first[0][1] + first[1][1] <= second[0][1] + second[1][1]:
+                    return True
+        return False
+    except:
+        return False
+
+
 def nested_rect(candidate, bound):
     """
     Function to define nested contours.
@@ -12,7 +30,7 @@ def nested_rect(candidate, bound):
     :return: True or False. depends on nested contours or not.
     """
     try:
-        if candidate[0] <= bound[0] and candidate[1] <= bound[1]:
+        if candidate[0] >= bound[0] and candidate[1] >= bound[1]:
             if candidate[0] + candidate[2] <= bound[0] + bound[2] and candidate[1] + candidate[3] <= bound[1] + \
                     bound[3]:
                 return True
@@ -242,8 +260,8 @@ class ImageLoader:
         for cont in conts:
             if cont.size > self.min_cont_len:
                 m = cv2.moments(cont)
-                cx = int(m['m10']/m['m00'])
-                cy = int(m['m01']/m['m00'])
+                cx = int(m['m10'] / m['m00'])
+                cy = int(m['m01'] / m['m00'])
                 centers.append((cx, cy))
         for center in centers:
             center_x += center[0]
