@@ -1,6 +1,4 @@
-data/train/
-data/cache/
-data/train.zip
+data/
 .idea/
 venv/
 build/
