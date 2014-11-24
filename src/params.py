@@ -4,7 +4,7 @@ import cv2
 # General params
 base_path = ""
 logfile = "result.log"
-features_cache = "color_feature_cache_5_10_6_6"
+features_cache = "../data/feature_extractor_cache/color_feature_cacche_5_10_6_6.gz"
 sample_size = 10000
 
 # Params of training samples
