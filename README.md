@@ -14,7 +14,7 @@ Deployment:
 1. `source venv/bin/activate`
 2. `pip install -r requirements.txt`
 3. `./build.sh`
-4. Unpack dataset
+4. Unpack dataset to the data/ directory
 5. Run `src/feature_extractors/tests/generate_texture_cache.py`
 6. Wait about 4 days. In console there are progress bar.
 7. Copy file `texture_feature_extractor_cache_delta=018` for example to https://drive.google.com/?tab=mo&authuser=0#folders/0Byzih9QxjDRmUGRieDZrYldoSVU
