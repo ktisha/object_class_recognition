@@ -1,4 +1,4 @@
-data/
+data/train/
 .idea/
 venv/
 build/
@@ -10,3 +10,5 @@ src/cache
 src/image_loader/haarcascade_test.py
 src/image_loader/haarcascade.xml
 src/image_loader/cat_log.txt
+.DS_Store
+src/.DS_Store
