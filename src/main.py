@@ -1,10 +1,13 @@
 import random
-
+import logging
 import params
+
 from feature_extractors.feature_extractor import FeatureExtractor
 from trainer import Trainer
 from tester import Tester
 from image_loader.image_loader import ImageLoader
+
+logging.basicConfig(filename=params.logfile, level=logging.DEBUG)
 
 
 def get_class_data(class_params, sample_size):
@@ -14,7 +17,7 @@ def get_class_data(class_params, sample_size):
     :param sample_size:
     :return:
     """
-    indexes = random.sample(range(0, class_params["image_count"]), sample_size)
+    indexes = random.sample(range(class_params["start_index"], class_params["image_count"]), sample_size)
     return map(
         lambda index: tuple([class_params["prefix"] + str(index) + class_params["postfix"], class_params["label"]]),
         indexes)
@@ -22,27 +25,18 @@ def get_class_data(class_params, sample_size):
 
 def get_train_and_test_data(class_params):
     """
-Method of generation names of test images for class
-:param class_params:
-:return: tuple of list of train and test data
-"""
-    # train_data = set()
-    # test_data = set()
-    # while len(train_data) < class_params['train_count']:
-    # number = random.randint(1, class_params['image_count'])
-    # train_data.add(number)
-    # while len(test_data) < class_params['test_count']:
-    # number = random.randint(1, class_params['image_count'])
-    #     if not number in train_data:
-    #         test_data.add(number)
-    # get_name = lambda x: tuple([class_params["prefix"] + str(x) + class_params["postfix"], class_params['label']])
-    # return map(get_name, train_data), map(get_name, test_data)
+    Method of generation names of test images for class
+    :param class_params:
+    :return: tuple of list of train and test data
+    """
     sample = get_class_data(class_params, class_params["train_count"] + class_params["test_count"])
     return Trainer.split_data(sample, [class_params["train_count"], class_params["test_count"]])
 
 
 def run_customization(image_loader, feature_extractor):
-    data = get_class_data(params.first_class_params, 5000) + get_class_data(params.second_class_params, 5000)
+    logging.info("Start customize svm")
+    logging.info("Generate sample")
+    data = get_class_data(params.first_class_params, params.sample_size/2) + get_class_data(params.second_class_params, params.sample_size/2)
     random.shuffle(data)
     trainer = Trainer(image_loader, feature_extractor)
     c_range = [10 ** i for i in xrange(-5, 10)]
@@ -53,10 +47,10 @@ def run_customization(image_loader, feature_extractor):
 
 def train_and_test(image_loader, feature_extractor):
     """
-Simple implementation of train and test function
-:param image_loader:
-:param feature_extractor:
-"""
+    Simple implementation of train and test function
+    :param image_loader:
+    :param feature_extractor:
+    """
     first_class_train_data, first_class_test_data = get_train_and_test_data(params.first_class_params)
     second_class_train_data, second_class_test_data = get_train_and_test_data(params.second_class_params)
 
@@ -71,7 +65,10 @@ Simple implementation of train and test function
 
 
 if __name__ == "__main__":
-    print (run_customization(ImageLoader(image_dir_path=params.image_dir),
-                             FeatureExtractor.load("color_feature_cache_5_10_6_6")))
+    result = run_customization(ImageLoader(image_dir_path=params.image_dir),
+                             FeatureExtractor.load(params.features_cache))
+    logging.info("RESULT:")
+    logging.info("  C   |   gamma   |   quality ")
+    [logging.info(" %s  |  %s | %s  ", c, gamma, q) for c,gamma,q in result]
     # print train_and_test(ImageLoader(image_dir_path=params.image_dir),
     # FeatureExtractor.load("color_feature_cache_5_10_6_6"))

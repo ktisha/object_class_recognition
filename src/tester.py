@@ -1,5 +1,6 @@
 __author__ = 'avesloguzova'
 
+import logging
 
 class Tester(object):
     @staticmethod
@@ -28,8 +29,8 @@ class Tester(object):
         :param image_name: name of image in loader directory
         :return: label of class for image
         """
-        print("Test " + image_name)
+        logging.debug("Test " + image_name)
         img = self.image_loader.load(image_name)
         res = self.solution_container.process(img)
-        print("result:" + str(res))
+        logging.debug("result:" + str(res))
         return res

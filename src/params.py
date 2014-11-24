@@ -3,19 +3,20 @@ import cv2
 
 # General params
 base_path = ""
+logfile = "result.log"
+features_cache = "color_feature_cache_5_10_6_6"
+sample_size = 10000
 
 # Params of training samples
 first_class_params = dict(prefix="cat.",
                           image_count=12499,
-                          train_count=200,
-                          test_count=5000,
+                          start_index=1000,
                           postfix=".jpg",
                           label=1)
 
 second_class_params = dict(prefix="dog.",
                            image_count=12499,
-                           train_count=202,
-                           test_count=5000,
+                           start_index=1000,
                            postfix=".jpg",
                            label=-1)
 
@@ -30,6 +31,7 @@ svm_save_file = "svm_classifier.dat"
 
 # Params of image loader
 image_dir = "../data/train"
+
 
 # Params of texture_feature_extractor
 tile_size = 50

@@ -1,5 +1,7 @@
 __author__ = 'avesloguzova'
 
+import logging
+
 from svm_classifier import SVMClassifier
 from solution_container import SolutionContainer
 from tester import Tester
@@ -17,11 +19,12 @@ class Trainer(object):
             images_names: names of images
             responses: expected responses for images
         """
+
         classifier = SVMClassifier(svm_params)
         solve_container = SolutionContainer(classifier, self.feature_extractor)
         test_features_vertor = [self.feature_extractor.extract(self.image_loader.load(item[0])) for item in test_data]
         test_responses = [item[1] for item in test_data]
-        print("Start training of classifier")
+        logging.debug("Start training of classifier")
         classifier.train(test_features_vertor, test_responses)
 
         return solve_container
@@ -40,6 +43,7 @@ class Trainer(object):
             for gamma in gamma_range:
                 default_svm_params["C"] = c
                 default_svm_params["gamma"] = gamma
+                logging.debug("Start cross validation with C = %e gamma = %e",c,gamma)
                 results.append((c, gamma, self.k_fold_cross_validation(5, data, default_svm_params)))
         return results
 
@@ -52,8 +56,7 @@ class Trainer(object):
         :param svm_params:
         :return:
         """
-        print ("Start validation for params")
-        print (svm_params)
+
         partition = [1 for __ in range(0, k)]
         test_parts = Trainer.split_data(data, partition)
         quality = []
@@ -66,6 +69,7 @@ class Trainer(object):
                         train_data.append(item)
             solution = self.train(train_data, svm_params)
             quality.append(Tester(self.image_loader, solution).test(validate_part))
+        logging.debug(quality)
         return sum(quality) / float(k)
 
 
@@ -84,13 +88,3 @@ class Trainer(object):
             part_size = len(sample) * part / norm
             result.append(sample[last_index: last_index + part_size])
         return tuple(result)
-
-
-
-
-
-
-
-
-
-
