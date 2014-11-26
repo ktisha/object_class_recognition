@@ -22,10 +22,10 @@ class Trainer(object):
 
         classifier = SVMClassifier(svm_params)
         solve_container = SolutionContainer(classifier, self.feature_extractor)
-        test_features_vertor = [self.feature_extractor.extract(self.image_loader.load(item[0])) for item in test_data]
+        test_features_vector = [self.feature_extractor.extract(self.image_loader.load(item[0])) for item in test_data]
         test_responses = [item[1] for item in test_data]
         logging.debug("Start training of classifier")
-        classifier.train(test_features_vertor, test_responses)
+        classifier.train(test_features_vector, test_responses)
 
         return solve_container
 
@@ -43,7 +43,7 @@ class Trainer(object):
             for gamma in gamma_range:
                 default_svm_params["C"] = c
                 default_svm_params["gamma"] = gamma
-                logging.debug("Start cross validation with C = %e gamma = %e",c,gamma)
+                logging.debug("Start cross validation with C = %e gamma = %e", c, gamma)
                 results.append((c, gamma, self.k_fold_cross_validation(5, data, default_svm_params)))
         return results
 
@@ -87,4 +87,5 @@ class Trainer(object):
         for part in partition:
             part_size = len(sample) * part / norm
             result.append(sample[last_index: last_index + part_size])
+            last_index += part_size
         return tuple(result)
