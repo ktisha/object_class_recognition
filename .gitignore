@@ -12,3 +12,4 @@ src/image_loader/haarcascade.xml
 src/image_loader/cat_log.txt
 .DS_Store
 src/.DS_Store
+result.log
