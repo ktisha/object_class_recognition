@@ -1,13 +1,14 @@
 import random
 import logging
-import params
 
+import params
 from feature_extractors.feature_extractor import FeatureExtractor
 from trainer import Trainer
 from tester import Tester
 from image_loader.image_loader import ImageLoader
 
-logging.basicConfig(filename=params.logfile, level=logging.DEBUG)
+
+logging.basicConfig(filename=params.logfile, level=logging.INFO)
 
 
 def get_class_data(class_params, sample_size):
