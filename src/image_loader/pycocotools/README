@@ -1,0 +1,11 @@
+Microsoft COCO (Common Object in COntext) is a large image dataset designed for object detection, segmentation, and image-to-caption.
+
+pycocotools is a python package that assists load, parse, and visualize annotations in Microsoft COCO dataset.
+To install pycocotools, run 
+python setup.py install
+
+After you install pycocotools and download all the necessary files, you can run demo
+python pycocotools_demo.py
+
+Detail documentations can be found at
+http://mscoco.org/downloads

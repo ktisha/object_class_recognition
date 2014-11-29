@@ -1,5 +1,6 @@
 data/train/
 data/cache/
+data/COCO/
 .idea/
 venv/
 build/
