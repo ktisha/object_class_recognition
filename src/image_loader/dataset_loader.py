@@ -28,7 +28,7 @@ class DatasetLoader:
         im_id_list = self.coco.getImageIds(params={'cat_id': category})
         anns = self.coco.loadAnnotations(params={'im_id_list': im_id_list, 'cat_id:': category, 'area__gt': 150*150})
         for ann in anns:
-            if counter > number_of_elements:
+            if counter >= number_of_elements:
                 break
             id = ann['image_id']
             name = self.coco.images[id]['file_name']
