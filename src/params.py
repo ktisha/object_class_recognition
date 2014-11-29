@@ -5,20 +5,19 @@ import cv2
 base_path = ""
 logfile = "../result.log"
 features_cache = "../data/feature_extractor_cache/color_feature_cacche_5_10_6_6.gz"
-sample_size = 10000
 
 # Params of training samples
-first_class_params = dict(prefix="cat.",
-                          image_count=12499,
-                          start_index=1000,
-                          postfix=".jpg",
-                          label=1)
+class_params = [dict(name="cat",
+                     label=1,
+                     sample_size=30),
 
-second_class_params = dict(prefix="dog.",
-                           image_count=12499,
-                           start_index=1000,
-                           postfix=".jpg",
-                           label=-1)
+                dict(name="dog",
+                     label=2,
+                     sample_size=30),
+
+                dict(name="horse",
+                     label=3,
+                     sample_size=30)]
 
 
 # Params of SVM
