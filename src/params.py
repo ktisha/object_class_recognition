@@ -9,15 +9,15 @@ features_cache = "../data/feature_extractor_cache/color_feature_cacche_5_10_6_6.
 # Params of training samples
 class_params = [dict(name="cat",
                      label=1,
-                     sample_size=30),
+                     sample_size=3000),
 
                 dict(name="dog",
                      label=2,
-                     sample_size=30),
+                     sample_size=3000),
 
                 dict(name="horse",
                      label=3,
-                     sample_size=30)]
+                     sample_size=3000)]
 
 
 # Params of SVM
