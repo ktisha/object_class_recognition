@@ -21,6 +21,9 @@ class Tester(object):
 
         results = [self.test_image(item) for item, __ in test_data]
         correct = Tester.default_quality(results, [excepted_response for __, excepted_response in test_data])
+        logging.info("Results of testing")
+        for result in zip(results, test_data):
+            logging.info(result)
         return correct
 
     def test_image(self, image_name):

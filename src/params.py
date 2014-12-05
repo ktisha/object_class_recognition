@@ -7,6 +7,7 @@ logfile = "../result.log"
 features_cache = "../data/feature_extractor_cache/color_feature_cacche_5_10_6_6.gz"
 
 # Params of training samples
+class_count = 4
 class_params = [dict(name="cat",
                      label=1,
                      sample_size=3000),
@@ -17,7 +18,32 @@ class_params = [dict(name="cat",
 
                 dict(name="horse",
                      label=3,
+                     sample_size=3000),
+
+                dict(name="sheep",
+                     label=4,
+                     sample_size=3000),
+
+                dict(name="cow",
+                     label=5,
+                     sample_size=3000),
+
+                dict(name="elephant",
+                     label=6,
+                     sample_size=3000),
+
+                dict(name="bear",
+                     label=7,
+                     sample_size=3000),
+
+                dict(name="zebra",
+                     label=8,
+                     sample_size=3000),
+
+                dict(name="giraffe",
+                     label=9,
                      sample_size=3000)]
+
 
 
 # Params of SVM

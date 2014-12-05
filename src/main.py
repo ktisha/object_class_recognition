@@ -40,10 +40,15 @@ def get_train_and_test_data(data_loader, class_params):
 
 
 def run_customization(dataset_loader, feature_extractor):
+
     logging.info("Start customize svm")
     logging.info("Generate sample")
+    logging.info("count of classes:%d", params.class_count)
     data = []
-    for class_params in params.class_params:
+    random.shuffle(params.class_params)
+    test_classes = params.class_params[0:params.class_count]
+    for class_params in test_classes:
+        logging.info(class_params)
         data += get_class_data(dataset_loader, class_params)
     random.shuffle(data)
     image_loader = ImageLoader(image_dir_path=dataset_loader.dataset_dir)

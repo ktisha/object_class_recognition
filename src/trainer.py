@@ -43,7 +43,7 @@ class Trainer(object):
             for gamma in gamma_range:
                 default_svm_params["C"] = c
                 default_svm_params["gamma"] = gamma
-                logging.debug("Start cross validation with C = %e gamma = %e", c, gamma)
+                logging.info("Start cross validation with C = %e gamma = %e", c, gamma)
                 results.append((c, gamma, self.k_fold_cross_validation(5, data, default_svm_params)))
         return results
 
@@ -69,7 +69,7 @@ class Trainer(object):
                         train_data.append(item)
             solution = self.train(train_data, svm_params)
             quality.append(Tester(self.image_loader, solution).test(validate_part))
-        logging.debug(quality)
+        logging.info(quality)
         return sum(quality) / float(k)
 
 
