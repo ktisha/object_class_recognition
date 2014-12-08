@@ -53,7 +53,7 @@ class TextureFeatureExtractor(FeatureExtractor):
                     self.tiles.append(new_tile)
                     self._debug_print('tiles count: {}'.format(len(self.tiles)))
                     if len(self.tiles) == self.tiles_count:
-                        return used_images
+                        return used_images + 1
         if len(self.tiles) != self.tiles_count:
             raise Exception('Tiles not generated')
 
