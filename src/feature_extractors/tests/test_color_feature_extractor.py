@@ -5,7 +5,7 @@ from src.image_loader.image_loader import ImageLoader
 import numpy as np
 from src.feature_extractors.color_feature_extractor import ColorFeatureExtractor
 from time import clock
-from src.feature_extractors.feature_extractor import  FeatureExtractor
+from src.feature_extractors.feature_extractor import FeatureExtractor
 
 
 DEBUG = 0

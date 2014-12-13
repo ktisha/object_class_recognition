@@ -65,7 +65,7 @@ def test():
 def main():
     use_cprofile = True
     if use_cprofile:
-        cProfile.run('test()')
+        cProfile.run('test()', sort=True)
     else:
         test()
 

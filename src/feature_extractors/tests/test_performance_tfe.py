@@ -16,7 +16,7 @@ def test():
     print('tile generation: {}'.format(stop - start))
     img = il.load(il.available_images()[100])
     start = time.time()
-    print(tfe.extract(img))
+    tfe.extract(img)
     stop = time.time()
     print('extraction: {}'.format(stop - start))
     #cv2.imshow('test_tile_tile_distance', img)
