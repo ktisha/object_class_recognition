@@ -1,3 +1,4 @@
+#!/bin/sh
 git clone https://github.com/UCB-ICSI-Vision-Group/decaf-release.git
 cd decaf-release
 sudo apt-get install gfortran libopenblas-dev liblapack-dev

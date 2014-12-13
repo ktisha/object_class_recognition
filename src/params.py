@@ -31,7 +31,7 @@ svm_save_file = "svm_classifier.dat"
 
 # Params of image loader
 image_dir = "../data/train"
-
+model_path = "/feature_extractors/model/"
 
 # Params of texture_feature_extractor
 tile_size = 50

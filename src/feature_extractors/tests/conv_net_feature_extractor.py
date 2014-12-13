@@ -4,7 +4,7 @@ __author__ = 'Yurgin Pavel'
 from src.image_loader.image_loader import ImageLoader
 from src.feature_extractors.feature_extractor import FeatureExtractor
 from src.feature_extractors.conv_net_feature_extractor import ConvNetFeatureExtractor
-from src.feature_extractors.color_feature_extractor import ColorFeatureExtractor
+
 
 def test_extract():
     from time import clock
@@ -20,7 +20,21 @@ def test_extract():
         image = i_loader.load(img)
         feature_extractor.extract(image)
     print(clock() - t)
+    feature_extractor.save("convnet_cache.pcl")
+
+def test_cache():
+    from time import clock
+    i_loader = ImageLoader(image_dir_path='../../../data/train')
+    available_images = i_loader.available_images()
+    feature_extractor = FeatureExtractor.load("convnet_cache.pcl")
+
+    t = clock()
+    for img in available_images[:100]:
+        image = i_loader.load(img)
+        feature_extractor.extract(image)
+    print(clock() - t)
 
 
 if __name__ == "__main__":
-    test_extract()
+    #test_extract()
+    test_cache()

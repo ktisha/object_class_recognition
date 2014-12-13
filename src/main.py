@@ -6,6 +6,7 @@ from feature_extractors.feature_extractor import FeatureExtractor
 from trainer import Trainer
 from tester import Tester
 from image_loader.image_loader import ImageLoader
+from feature_extractors.conv_net_feature_extractor import ConvNetFeatureExtractor
 
 
 logging.basicConfig(filename=params.logfile, level=logging.INFO)
@@ -66,6 +67,10 @@ def train_and_test(image_loader, feature_extractor):
 
 
 if __name__ == "__main__":
+    feature_extractor = ConvNetFeatureExtractor(
+        pretrained_meta="./feature_extractors/model/imagenet.decafnet.meta",
+        pretrained_params="./feature_extractors/model/imagenet.decafnet.epoch90"
+    )
     result = run_customization(ImageLoader(image_dir_path=params.image_dir),
                              FeatureExtractor.load(params.features_cache))
     logging.info("RESULT:")

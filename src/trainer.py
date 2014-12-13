@@ -39,7 +39,9 @@ class Trainer(object):
         :return:
         """
         results = []
-        for c in c_range:
+        for it, c in enumerate(c_range):
+            if not it % 100:
+                print(float(it) / len(list(c_range)))
             for gamma in gamma_range:
                 default_svm_params["C"] = c
                 default_svm_params["gamma"] = gamma
