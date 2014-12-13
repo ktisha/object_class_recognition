@@ -22,10 +22,9 @@ second_class_params = dict(prefix="dog.",
 
 
 # Params of SVM
-svm_params = dict(kernel_type=cv2.SVM_RBF,
+svm_params = dict(kernel_type=cv2.SVM_LINEAR,
                   svm_type=cv2.SVM_C_SVC,
-                  C=100,
-                  gamma=0.001)
+                  C=1)
 
 svm_save_file = "svm_classifier.dat"
 
