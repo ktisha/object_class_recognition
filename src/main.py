@@ -72,9 +72,10 @@ if __name__ == "__main__":
         pretrained_params="./feature_extractors/model/imagenet.decafnet.epoch90"
     )
     result = run_customization(ImageLoader(image_dir_path=params.image_dir),
-                             FeatureExtractor.load(params.features_cache))
+                             feature_extractor)
     logging.info("RESULT:")
     logging.info("  C   |   gamma   |   quality ")
     [logging.info(" %s  |  %s | %s  ", c, gamma, q) for c,gamma,q in result]
+    feature_extractor.save("convnet_cache.pkl")
     # print train_and_test(ImageLoader(image_dir_path=params.image_dir),
     # FeatureExtractor.load("color_feature_cache_5_10_6_6"))
