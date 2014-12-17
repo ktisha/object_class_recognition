@@ -47,7 +47,7 @@ class Trainer(object):
                 results.append((c, gamma, self.k_fold_cross_validation(5, data, default_svm_params)))
         return results
 
-    def k_fold_cross_validation(self, k, data, svm_params):
+    def k_fold_cross_validation(self, k, data, svm_params, labels=None):
         """
         http://statweb.stanford.edu/~tibs/sta306b/cvwrong.pdf
 
@@ -68,7 +68,7 @@ class Trainer(object):
                     for item in part:
                         train_data.append(item)
             solution = self.train(train_data, svm_params)
-            quality.append(Tester(self.image_loader, solution).test(validate_part))
+            quality.append(Tester(self.image_loader, solution).test(validate_part, labels))
         logging.debug(quality)
         return sum(quality) / float(k)
 

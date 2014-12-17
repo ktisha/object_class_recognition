@@ -37,13 +37,25 @@ def get_train_and_test_data(class_params):
 def run_customization(image_loader, feature_extractor):
     logging.info("Start customize svm")
     logging.info("Generate sample")
-    data = get_class_data(params.first_class_params, params.sample_size/2) + get_class_data(params.second_class_params, params.sample_size/2)
+    data = get_class_data(params.first_class_params, params.sample_size / 2) + get_class_data(
+        params.second_class_params, params.sample_size / 2)
     random.shuffle(data)
     trainer = Trainer(image_loader, feature_extractor)
     c_range = [10 ** i for i in xrange(-5, 10)]
     gamma_range = [10 ** i for i in xrange(-5, 5)]
     results = trainer.svm_params_customization(data, params.svm_params, c_range, gamma_range)
     return results
+
+
+def run_cross_validation(image_loader, feature_extractor):
+    logging.info("Start 5-fold cross validation")
+    logging.info("Generate sample")
+    data = get_class_data(params.first_class_params, params.sample_size / 2) + get_class_data(
+        params.second_class_params, params.sample_size / 2)
+    random.shuffle(data)
+    trainer = Trainer(image_loader, feature_extractor)
+    return trainer.k_fold_cross_validation(5, data, params.svm_params, params.labels)
+
 
 
 def train_and_test(image_loader, feature_extractor):
@@ -66,10 +78,12 @@ def train_and_test(image_loader, feature_extractor):
 
 
 if __name__ == "__main__":
-    result = run_customization(ImageLoader(image_dir_path=params.image_dir),
-                             FeatureExtractor.load(params.features_cache))
-    logging.info("RESULT:")
-    logging.info("  C   |   gamma   |   quality ")
-    [logging.info(" %s  |  %s | %s  ", c, gamma, q) for c,gamma,q in result]
+    result = run_cross_validation((ImageLoader(image_dir_path=params.image_dir),
+                                   FeatureExtractor.load(params.features_cache)))
+    # result = run_customization(ImageLoader(image_dir_path=params.image_dir),
+    # FeatureExtractor.load(params.features_cache))
+    # logging.info("RESULT:")
+    # logging.info("  C   |   gamma   |   quality ")
+    # [logging.info(" %s  |  %s | %s  ", c, gamma, q) for c, gamma, q in result]
     # print train_and_test(ImageLoader(image_dir_path=params.image_dir),
     # FeatureExtractor.load("color_feature_cache_5_10_6_6"))
