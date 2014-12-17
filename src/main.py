@@ -57,7 +57,6 @@ def run_cross_validation(image_loader, feature_extractor):
     return trainer.k_fold_cross_validation(5, data, params.svm_params, params.labels)
 
 
-
 def train_and_test(image_loader, feature_extractor):
     """
     Simple implementation of train and test function
@@ -78,8 +77,8 @@ def train_and_test(image_loader, feature_extractor):
 
 
 if __name__ == "__main__":
-    result = run_cross_validation((ImageLoader(image_dir_path=params.image_dir),
-                                   FeatureExtractor.load(params.features_cache)))
+    result = run_cross_validation(ImageLoader(image_dir_path=params.image_dir),
+                                  FeatureExtractor.load(params.features_cache))
     # result = run_customization(ImageLoader(image_dir_path=params.image_dir),
     # FeatureExtractor.load(params.features_cache))
     # logging.info("RESULT:")
