@@ -25,10 +25,9 @@ class Tester(object):
         recall = true_positives / (true_positives + false_negatives)
         return 2.0 * precision * recall / (precision + recall)
 
-    def __init__(self, image_loader, solution_container, quality_function=default_quality):
+    def __init__(self, image_loader, solution_container):
         self.image_loader = image_loader
         self.solution_container = solution_container
-        self.quality = quality_function
 
     def test(self, test_data, labels=None):
         """
@@ -41,8 +40,8 @@ class Tester(object):
         excepted = [excepted_response for __, excepted_response in test_data]
         if labels:
             for label in labels:
-                logging.info(Tester.f1_score(results, excepted, label))
-        correct = self.quality(results, excepted)
+                logging.info("f1-score for class %s: %f" % (str(label), Tester.f1_score(results, excepted, label)))
+        correct = Tester.default_quality(results, excepted)
         return correct
 
     def test_image(self, image_name):

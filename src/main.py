@@ -49,6 +49,8 @@ def run_customization(image_loader, feature_extractor):
 
 def run_cross_validation(image_loader, feature_extractor):
     logging.info("Start 5-fold cross validation")
+    logging.info("For cat and dogs")
+    logging.info(params.svm_params)
     logging.info("Generate sample")
     data = get_class_data(params.first_class_params, params.sample_size / 2) + get_class_data(
         params.second_class_params, params.sample_size / 2)
