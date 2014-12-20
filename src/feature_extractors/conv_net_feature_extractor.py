@@ -64,8 +64,7 @@ class ConvNetFeatureExtractor(FeatureExtractor):
         :param cv2 image
         :return: np.array with shape (4096,)
         """
-        img = self.convnet.oversample(img, center_only=self.center_only)
-        self.convnet.classify_direct(img)
+        self.convnet.classify(img, center_only=self.center_only)
         feat = self.convnet.feature(self.feature_layer)
         if not self.center_only:
             feat = feat.mean(0)
